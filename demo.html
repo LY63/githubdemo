@@ -8,5 +8,892 @@
 </head>
 <body>
     <h1>hahah</h1>
+    ##   一、封装截取url参数
+
+```js
+    var str='http://www.baidu.com?key1=a&key2=b&key3=c';
+    function getUrl(str){
+      var obj={}
+      var arr=str.split('?')[1]//key1=a&key2=b&key3=c
+      console.log(arr);
+      var arrNew=arr.split('&');//["key1=a", "key2=b", "key3=c"]
+      console.log(arrNew);
+      for(var i=0;i<arrNew.length;i++){
+        var ar=arrNew[i].split('=') //["key1", "a"] ["key2", "b"] ["key3", "c"]
+        console.log(ar);
+        obj[ar[0]]=ar[1]
+      }
+      console.log(obj);
+      return obj 
+    }
+    getUrl(str)
+```
+
+## 数组去重复
+
+```
+    var arr=[1,1,1,2,3,6,3,5,6,5,6,4,4,5,5,]
+    var arrNew=[]
+    for(var i=0;i<arr.length;i++){
+        if(arrNew.indexOf(arr[i])==-1){
+            arrNew.push(arr[i])
+        }
+    }
+    console.log(arrNew);
+```
+
+## 冒泡排序
+
+```
+    var arr=[3,6,7,65,1,2,9,45]
+    for(var i=0;i<arr.length;i++){
+        for(var j=0;j<arr.length;j++){
+            if(arr[j]>arr[j+1]){
+                var t
+                t=arr[j]
+                arr[j]=arr[j+1]
+                arr[j+1]=t
+            }
+        }
+    }
+    console.log(arr);
+```
+
+## 判断俩个对象相等
+
+###### 方式一：
+
+```js
+    var obj={name:'abc'}
+    var obj1={name:'abc'}
+    console.log(JSON.stringify(obj)==JSON.stringify(obj1))//只能判断字面量形式的对象，带原型的不能看
+```
+
+###### 方式二：
+
+```
+
+            var keys1 = Object.keys(o1);// ["name", "age"] 找到这个对象所有的 属性名
+            keys1 = keys1.concat( Object.keys(o1.__proto__ ));//Object.keys(o1.__proto__ ) :[color]
+
+            var keys2 = Object.keys(o2);
+            keys2=keys2.concat(Object.keys(o2.__proto__ ))
+            if(keys1.length>keys2.length){
+                var [obj1,obj2] = [o1,o2];
+            }else{
+                var [obj1,obj2] = [o2,o1];
+            }
+
+           for(var key in obj1){
+            console.log(obj1[key],obj2[key])
+               if(obj1[key]&&obj2[key]){  // o1和o2 都存在 key这个属性
+                if(obj1[key] instanceof Object && obj2[key] instanceof Object){
+                    compareObj(obj1[key],obj2[key])
+                }else{
+                   if(obj1[key]!==obj2[key]){  // 
+                    console.log(false);
+                    return false
+                  } 
+                }
+
+               }else{
+                    console.log(false)
+               }
+           }
+        }
+        compareObj(obj,obj2);
+```
+
+
+
+## 写一个方法，传入一个dom元素，如何找到他的先祖元素中所有的div的个数，并返回
+
+```html
+     <div>
+        <ul>
+            <li>
+                <p>
+                    <div>
+                        <div>
+                            <ul>
+                                <li>
+                                    <div id="md"></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </p>
+            </li>
+        </ul>
+    </div>
+  <script>
+   var arr=[]
+    function getEle(ele){
+      if(ele.parentElement){
+        if(ele.parentElement.nodeName=="DIV"){
+          arr.push(ele.parentElement)
+        }
+        getEle(ele.parentElement)
+      }
+      return arr
+    }
+    var ele=document.getElementById('md')
+    var res=getEle(ele)
+    console.log(res);
+</script>
+```
+
+## 下面一段话至少使用俩种方法实现
+
+​    var str =‘this is a test’;将它每个单词的首字母大写
+
+```js
+  var a='this is a test'
+    function titleCase1(str){
+        var abc=str.toLowerCase().split(' ')
+        for(var i=0;i<abc.length;i++){
+            var bcd=abc[i].charAt(0)
+            abc[i]=abc[i].replace(bcd,function replace(bcs){
+                return bcd.toUpperCase()
+            })
+        }
+        return abc.join(' ')
+    }
+    console.log(titleCase1(a));
+```
+
+## 将该数组A转换为数组B
+
+​    A=[ [2,3],[4],[5,6],[7] ]
+
+​    B=[ [2,4,5,7],[2,4,6,7],[3,4,5,7],[3,4,6,7] ]
+
+```js
+   var arr = [[2, 3, 8, 9], [4], [5, 6], [7]];
+    var arrNew = []
+    for (var i = 0; i < arr[0].length; i++) {
+        for (var k = 0; k < arr[1].length; k++) {
+            for (var j = 0; j < arr[2].length; j++) {
+                for (var b = 0; b < arr[3].length; b++) {
+                    arrNew.push([arr[0][i], arr[1][k], arr[2][j], arr[3][b]])
+
+                }
+            }
+        }
+    }
+    console.log(arrNew);
+```
+
+## 动态打印事件，格式为yyyy-MM-ddhh:mm:ss并且每秒刷新
+
+```html
+<h1 id="time">1111</h1>
+```
+
+```js
+<script>
+    setInterval(function(){
+    var date=new Date()
+    var nian=date.getFullYear()
+    var yue=date.getMonth()+1
+    var ri=date.getDay()
+    var shi=date.getHours()
+    var fen=date.getMinutes()
+    var miao=date.getSeconds()
+    var h1=document.getElementById('time')
+    var a=h1.innerHTML=nian+'-'+yue+'-'+ri+' '+shi+':'+fen+':'+miao;
+    },1000)
+
+</script>
+```
+
+## 判断一个字符串中出现次数做多的字符，并统计次数
+
+```js
+    var str = "helloworldhellllloworld";
+    var obj = {};
+    for (var i = 0; i < str.length; i++) {
+        if (obj[str[i]]) {
+            obj[str[i]]++
+        } else {
+            obj[str[i]] = 1
+        }
+    }
+    console.log(obj);
+    var max=0;
+    for(var key in obj){
+        if(max<obj[key]){
+            max=obj[key]
+            var abc;
+            abc=key
+        }
+    }
+    console.log(abc,max);
+```
+
+## 写一段代码，让id为seconds的容器里面的数字每秒少一，一直变到0.
+
+```html
+<div id="seconds">60</div><input type= "button" value="倒计时" onclick,=test()"/>
+```
+
+```js
+<script>
+    var div=document.getElementById('seconds')
+    function test(){
+        setInterval(()=>{
+            if(div.innerHTML!=0){
+                div.innerHTML--
+            }
+        },1000)
+    }
+</script>
+```
+
+## 如下代码实现了这样一 个功能， 创建了5个按钮，每个按钮点击一下会把自身显示的数字加1.
+
+```html js
+<button>1</button>
+<button>2</button>
+<button>3</button>
+<button>4</button>
+<button>5</button>
+<script>
+    var btn=document.querySelectorAll('button')
+    for(var i=0;i<btn.length;i++){
+        btn[i].onclick=function(){
+            this.innerHTML++
+        }
+    }
+</script>
+```
+
+## 简要举例你所知道的http状态码以及其含义？
+
+```
+1xx: 代表请求已被接受，需要继续处理
+100: 客户端它的部分请求已经被服务器接收，应当继续发送请求的剩余部分。
+2xx: 代表请求已成功被服务器接收、理解、并接受。
+200: 请求已成功,并别处理
+202: 服务器已接受请求，但尚未处理。
+205: 服务器成功处理了请求，且没有返回任何内容。
+3xx: 代表需要客户端采取进一步的操作才能完成请求。
+300: 用户或浏览器能够自行选择一个首选的地址进行重定向。
+301: 被请求的资源已永久移动到新位置
+304: 客户端发送了一个带条件的 GET 请求,且该请求已被允许，而请求和上次对比没有改变，则服务器应当返回304。
+4xx: 客户端看可能发生了错误
+400:
+  1、语义有误，当前请求无法被服务器理解。
+  2、请求参数有误。
+401: 当前请求需要用户验证
+403: 服务器已经理解请求，但是拒绝执行它。
+404: 请求失败，请求的资源路径错误。
+5xx: 这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生
+500: 一般来说，这个问题都会在服务器端的源代码出现错误时出现。
+501:服务器不支持当前请求所需要的某个功能。
+503:由于临时的服务器维护或者过载，服务器当前无法处理请求。
+505:服务器不支持，或者拒绝支持在请求中使用的 HTTP 版本。
+600: 没有返回响应头部，只返回实体内容。
+```
+
+```简洁版
+1xx: 代表请求已被接受，需要继续处理
+2xx: 代表请求已成功被服务器接收、理解、并接受。
+3xx: 代表需要客户端采取进一步的操作才能完成请求。
+4xx: 客户端看可能发生了错误
+5xx: 后台出现错误或异常状态
+600: 没有返回响应头部，只返回实体内容。
+```
+
+## Img的alt和title的异同？
+
+```答案
+1、alt是当图片不存在时的代替文字；title是对图片的描述与进一步说明
+2、搜索引擎对图片意思的判断，主要靠alt属性
+元素的alt是表示图片加载失败显示的文本内容，而title是表示鼠标悬停图片时显示的文本内容.
+  在alt和title同时设置的时候，alt作为图片的替代文字出现，title是图片的解释文字
+```
+
+## Doctype的作用
+
+```
+1、确保浏览器能够预先知道文档类型
+2、告知Web浏览器页面使用了哪种HTML版本
+<!DOCTYPE>,文档声明；用于告知浏览器该以何种模式来渲染文档.
+```
+
+## HTML5新特性
+
+```答
+1. 用于绘画 canvas 元素。
+2. 用于媒介回放的 video 和 audio 元素。
+3. 本地离线存储 localStorage 长期存储数据，浏览器关闭后数据不丢失；sessionStorage 的数据在浏览器关闭后自动删除。
+4. 语意化更好的内容元素，比如 article、footer、header、nav、section。
+5. 表单控件，calendar、date、time、email、url、search。
+6. 地理定位  高德 百度 谷歌 
+7. 拖拽
+8. WebSocket：时时通讯
+```
+
+## css3 新特性
+
+```答
+1.选择器。
+2.和透明度。
+3. 弹性盒子
+4.Word Wrap。
+5. 文字阴影。
+6.@font-face属性。
+7.圆角(边框半径)。
+8.边框图片。
+9.盒阴影。
+10. 媒体查询。
+11. 语音  css设置标签内容语音朗读
+```
+
+## 数据类型判断
+
+```答
+typeof
+Object.prototype.toString.call(arr)
+arr.constructor===Array
+arr instanceof Array
+Array.isArray()
+```
+
+### var arr = ['大', '小', '大', '大', '小', '中', '大', '大', '大', '中', '小', '中', '小', '中', '大', '小', '小', '中']
+
+```
+      var arr = ['大', '小', '大', '大', '小', '中', '大', '大', '大', '中', '小', '中', '小', '中', '大', '小', '小', '中']
+      // 如何找出出 重复的片段
+        var arrNew =[];
+        for(var i=0;i<arr.length;i++){
+            if(arrNew.length==0&&arr[i]!='中'){//第一次添加  arrNew.length==0 直接放
+                var obj = {};
+                obj.name=arr[i];
+                arr[i+1]=='中'?obj.is_zhong=1:obj.is_zhong=0;
+                obj.num=1;
+                arrNew.push(obj) ;
+            }else{  // 不是第一次添加
+                  // 如果 arrNew数组中最后一个对象的name 不能于 arr[i].name
+                if(arrNew[arrNew.length-1].name!=arr[i]&&arr[i]!='中'){
+                    // console.log('in')
+                    var obj = {};
+                    obj.name=arr[i];
+                    arr[i+1]=='中'?obj.is_zhong=1:obj.is_zhong=0;
+                    obj.num=1;
+                    arrNew.push(obj) ;
+                }
+                else if(arr[i]=='中'){
+                    arrNew.push({name:'null'}) ;
+                }
+                else{  //  arrNew数组中最后一个对象的name  == arr[i]
+                    if(arr[i+1]=='中'){
+                        arrNew[arrNew.length-1].is_zhong=1;
+                    }else{
+                        arrNew[arrNew.length-1].is_zhong=0;
+                    }  
+                    arrNew[arrNew.length-1].num+=1
+                }
+            }
+        }
+        for(var k=0;k<arrNew.length;k++){
+            if(arrNew[k].name=='null'){
+                 arrNew.splice(k,1)   
+            }
+         }
+        console.log(arrNew);// [大小大中小大中]
+```
+
+
+
+## 瀑布流原理
+
+```
+先把固定的列 设置好，比如说设置5个div盒子，把图片添加到 这5列盒子里面，添加的时候，要时时计算每一列的高度，然后把要添加的图片，放到最小高度的div里面
+```
+
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .view {
+        width: 100%;
+    }
+
+    .view>div {
+        width: 18%;
+        /* height: auto; */
+        border: 1px red solid;
+        float: left;
+        margin: 5px;
+    }
+</style>
+
+<body>
+    <div class="view">
+        <div id='col1'></div>
+        <div id='col2'> </div>
+        <div id='col3'></div>
+        <div id='col4'></div>
+        <div id='col5'></div>
+    </div>
+
+    <script>
+        var arr = [
+        { avatar: "./img(1)/1.jpg" },
+        { avatar: "./img(1)/2.jpg" },
+        { avatar: "./img(1)/3.jpg" },
+        { avatar: "./img(1)/4.jpg" },
+        { avatar: "./img(1)/5.jpg" },
+        { avatar: "./img(1)/6.jpg" },
+        { avatar: "./img(1)/7.jpg" },
+        { avatar: "./img(1)/8.jpg" },
+        { avatar: "./img(1)/9.jpg" },
+        { avatar: "./img(1)/10.jpg" },
+        { avatar: "./img(1)/11.jpg" },
+        { avatar: "./img(1)/12.jpg" },
+        { avatar: "./img(1)/13.jpg" },
+        { avatar: "./img(1)/14.jpg" },
+        { avatar: "./img(1)/15.jpg" },
+        { avatar: "./img(1)/16.jpg" },
+        { avatar: "./img(1)/17.jpg" },
+        { avatar: "./img(1)/18.jpg" },
+        { avatar: "./img(1)/19.jpg" },
+        { avatar: "./img(1)/20.jpg" }
+    ]
+
+        //    思路循环创建img 标签 
+        var arrImg = [];
+        for (var i = 0; i < arr.length; i++) {
+            var img = document.createElement('img');
+            img.src = arr[i].avatar;
+            img.style.width = '100%';
+            arrImg.push(img);
+
+        }
+        col1.appendChild(arrImg[0])
+        col2.appendChild(arrImg[1])
+        col3.appendChild(arrImg[2])
+        col4.appendChild(arrImg[3])
+        col5.appendChild(arrImg[4])
+
+        function getMinHeight() {
+            var p = new Promise(function (resolve, reject) {
+                setTimeout(()=>{
+                    $(function(){  // 这里不要使用window.onload 因为只能调用一次 下次在调用就不行了
+                    var col1 = $('#col1').height();
+                    var col2 = $('#col2').height();
+                    var col3 = $('#col3').height();
+                    var col4 = $('#col4').height();
+                    var col5 = $('#col5').height();
+                    var arr = [col1, col2, col3, col4, col5];   // 134
+                    console.log(arr);
+                    var samll = Math.min(col1, col2, col3, col4, col5);
+                    var index = arr.indexOf(samll);
+                    resolve(document.getElementById('col' + (index + 1)))
+                })  
+                },100)
+             
+            })
+            return p;
+        }
+
+       async function appendImg(){
+            for(var i=5;i<arrImg.length;i++){
+                var ele = await  getMinHeight();
+                console.log(ele);
+                ele.appendChild(arrImg[i]);
+                console.log('渲染完成+1')
+            }
+        }
+        appendImg();
+    </script>
+</body>
+
+</html>
+```
+
+
+
+
+## 选择器优先级
+
+```
+！  》内联 》id  》class >行内 》星号    标签
+```
+
+
+
+## xml和html区别
+
+```
+1、xml也是一种标记语言 也有标签，每个标签必须有匹配的结束标签
+2、在XML文档中，空白部分不会被解析器自动删除;但是html是过滤掉空格的。
+3、而xml的设计目标是描述数据并集中于数据的内容
+
+       XML 是一种可扩展的标记语言，很类似 HTML
+       其设计宗旨是传输数据，而非显示数据
+       XML 标签没有被预定义。您需要自行定义标签。
+       XML 被设计为具有自我描述性。
+       
+        HTML 指的是超文本标记语言 
+        其不是一种编程语言，而是一种标记语言 
+       	那么标记语言就是一套标记标签
+        HTML 使用标记标签来描述网页
+        
+共同点都算是标记语言 xml必须要有闭合标签  可以自行定义标签 代码没有那么严谨 
+				html没有结束标签  HTML必须执行w3c标准  空格不会被解析
+```
+
+## 内存泄露的情况有哪些
+
+```
+1、死循环
+2、闭包
+3、dom移除，事件没有移除    元素。onclick 等于none    或者removeEventListener
+```
+
+## 超出整数范围的俩个数字相加的方法
+
+```js
+function add(a,b){
+    // 保存最终结果
+    var res='';
+
+    // 保存两位相加的结果 和 进位值
+    var c=0;
+
+    // 字符串转数组
+    a = a.split('');
+    b = b.split('');
+
+    while (a.length || b.length || c){
+        // ~~ 用来把String类型 转为 Number类型
+        // 把两位相加的结果 和 进位值相加
+        // pop方法返回数组的最后一位，并删除
+        c += ~~a.pop() + ~~b.pop();
+        // 取余，把余数拼接到最终结果中
+        res = c % 10 + res;
+        // 保存进位，true 或者 false
+        c = c>9;
+    }
+    console.log(res)
+    return res;
+}
+add('11111111111111111','22222222222222222');
+```
+
+## 常用的浏览器有哪些 内核是什么
+
+```
+IE                        Trident
+火狐      FIrefox          Gecko
+谷歌      Chrome           blink
+Safari                    webkit
+Opera    欧朋              =blink
+```
+
+## 什么是json
+
+```答
+JSON是纯文本
+JSON具有“自我描述性”(人类可读)
+JSON具有层级结构(值中存在值)
+JSON可通过JavaScript 进行解析
+JSON数据可使用AJAX 进行传输
+```
+
+## 元素复制（克隆）？
+
+```
+cloneNode(true) true代表复 制子元素
+
+  <div id="d">
+        <p>
+            sad
+        </p>
+    </div>
+            var a=document.getElementById('d').cloneNode(true)
+        console.log(a);
+```
+
+## 让他的第二个单词后边大写welcome-d-l-c
+
+###### 方式一：
+
+```
+            var str = "welcome-d-l-c";
+            function getStr() {
+               var arr= str.split('-')
+               var res=arr[0]
+               for(var i=1;i<arr.length;i++){
+                   var b=arr[i].replace(arr[i][0],arr[i][0].toUpperCase());
+                   res+=b
+               }
+               return res
+            }
+            console.log(getStr() )
+```
+
+###### 方式二：
+
+```
+        		var str = "welcome-d-l-c";
+        		var s='';
+                for(var i=0;i<str.length;i++){
+                    if(str[i]=='-'){
+                        s+=str[i+1].toUpperCase();
+                        i++
+                    }else{
+                        s+=str[i];
+                    }
+                }
+                console.log(s);
+```
+
+## ajax中get和post的请求区别
+
+```
+1、Get请求时,参数在URL中显示,而使用Post方式,则不会显示出来
+2、使用Get请求发送数据量小,Post请求发送数据量大
+3、GET请求只能进行url编码，而POST支持多种编码方式。
+4、GET请求参数会被完整保留在浏览器历史记录里，而POST中的参数不会被保留。
+```
+
+## 手写闭包代码
+
+```
+   function fn1(){
+            var a=0;
+            function fn2(){
+                ++a
+                alert(a)
+            }
+            return fn2
+        }
+        fn1()()
+        var f=fn1()
+        f()
+        f()
+```
+
+## 字符串的API
+
+```
+split()：                 切割字符串 返回数组
+slice():                 截取字符串和数组   支持负数 
+replace(a,b):             把a 换成b   a可以是一个正则表达式
+index Of() :              查找数组 字符串  找到返回下标  没找到返回-1
+lastindexOf():            从后往前查
+JSON.stringfy(对象)：      把对象转为字符串
+JSON.pase("字符串")：      把字符串转成对象
+subString()：            截取字符串     不支持负数
+charAt()：               等同于str[0]
+toUpperCase()：          小写转大写
+toLowerCase()：          大写转小写
+scratch（）：             返回下标 找不到返回-1  支持正则表达式
+concat():                字符串拼接
+join("-")：              代表以-链接，用于把数组转换成字符串
+trim():                  方法删除俩边空白符
+```
+
+## get的本地操作
+
+```
+1、创建仓库              git init
+2、提交到暂存区，         git add文件夹或文件名称  代表全部文件
+3、提交到仓库             git commit -m ‘提交的描述’
+4、查看提交记录           git log
+5、回退版本               git reset --hard commit_id
+6、丢弃工作区没有提交的代码   git checkout --gitdemo.html
+7、丢弃暂存区的代码         git reset HEAD 文件名  再 git checkout -- 文件名
+8、查找分支                git branch
+9、创建分支                git branch +名字
+10、切换分支	              git checkout +名字
+11、创建+切换分支           git checkout -b	分支名
+12、删除某个分支            git branch -d	分支名
+13、合并分支               git merge 分支名  妹子
+>>>>注意：切换dev后，不修改master的代码，就不会冲突，修改msater就会冲突，合并dev分支代码就会发生冲突吗，解决冲突，只需要在开发工具中，选择代码合并方式即可
+```
+
+## git 设置ssh
+
+```
+ 1、ssh-keygen -t rsa -C "173794464@qq.com"
+ 2、cat ~/.ssh/id_rsa.pub
+ 3、将生成的密钥 添加到gitee仓库中，就可以使用ssh地址 克隆和提交项目了
+```
+
+## git 远程仓库管理
+
+```
+注意：项目组给你一个项目链接，你就克隆到本地
+1. 查看远程地址                  git remote -v 
+2. 删除远程链接                  git remote remove origin
+3. 添加远程地址：                 git remote add origin 
+4. 同步远程                      git pull origin master  
+5. 第一次推送 master 分支的所有内容 git push -u origin master 
+```
+
+
+
+## Promise的用法和使用场景，以及使用promise封装接口的API
+
+##### 1、什么是promise？
+
+```
+是es6的新增语法，用来解决异步问题，接口套接口的回调地狱问题
+```
+
+##### 2、promise的基本语法
+
+```
+ 						var a = 2;
+                        var p = new Promise(function (resolve, reject) {
+                            if ('异步请求成功') {
+                                resolve('成功的结果')
+                            } else {
+                                reject('失败的结果')
+                            }
+                        });
+                        p.then(
+                            function (res1) {
+                                console.log(res1)    // 成功resolve promise 的第一个then中的第一个函数来处理
+                            },
+                            //可以写俩个函数
+                            function(res2){
+                                console.log(res2);//then的第二个函数也可以用来接受reject的返回值   2
+                            }
+                        ).catch(function (error) {//必须写
+                            // 捕获错误
+                            if (error) {
+                                console.log(error)
+                            }
+                        }).
+                            then(function (er) {//第二个then是第一个then结束后的回调函数
+                                // 第一个then 处理结束后的回调函数
+                                console.log('处理完成')
+                            })
+                    // 获得reject 的结果 使用catch   then 也是可以捕获的，但是会报错
+
+```
+
+###### 语法总结
+
+```
+（1）promise的参数是一个回调函数，回调函数中有有俩个参数分别是 resolve，reject
+		resolve用来返回异步请求成功的结果
+		reject用来返回异步请求失败的结果
+（2）promise的对象将异步结果保存后 需要使用第一个.then来获取结果resolve函数的返回结果  .catch 获取reject返回结果 。当然我们也可以在第一个.then中的第二个回调函数获得reject返回的结果（以上问题可以查看代码）
+（3）promise还可以使用第二个.then是第一个.then的回调函数，这里既可以继续处理其他逻辑（个人感觉有些马后炮的意思所以不经常使用，所以出现的概率有点低）
+```
+
+
+
+##### 3、promise.all的用法
+
+###### promise.all语法
+
+```
+           var p1=Promise(function(resolve,reject){
+               setTimeout(function(){
+                   resolve('p1完成')
+               },1000)
+           })
+           var p2=Promise(function(resolve,reject){
+               setTimeout(function(){
+                   resolve('p1完成')
+               },2000)
+           })
+           var p3=Promise(function(resolve,reject){
+               setTimeout(function(){
+                   resolve('p1完成')
+               },3000)
+           })
+           Promise.all([p3,p2,p1]).then(function(res){
+               console.log(res);
+               //p3,p2,p1是我们调用的顺序 ["p3完成","p2完成","p1完成"]是我们返回的结果
+               //可以看得出来，我们控制了3个异步请求的返回顺序
+           })
+```
+
+总结 ：promise.all的使用场景就是可以同时处理多个异步请求并控制他们返回【结果的顺序】
+
+注意：promise.all中的任何一个请求，都将不会有返回结果
+
+##### 4、promis.race的用法
+
+```
+        var p1=new Promise(function(resolve,reject){
+            setTimeout(function(){
+                resolve('p1');
+            },1000)
+        });
+        var p1=new Promise(function(resolve,reject){
+            setTimeout(function(){
+                resolve('p1');
+            },30)
+        });
+        Promise.race([p1,p2]).then(function(data){
+            console.log(data);//'p2'  这里只返回一个执行最快的结果
+        })
+```
+
+##### 5、promise结合await asyan封装接口API
+
+```
+var token = JSON.parse(localStorage.getItem('userInfo')).remember_token
+function http(url, type, data = '') {
+  var p =  new Promise((v, b) => {
+        $.ajax({
+            headers: {
+                Authorization: 'Bearer ' + token
+            },
+            url,
+            type,
+            data,
+            success: (res) => {
+                v(res)
+            },error:(er)=>{
+                b(er)
+            }
+        })
+    })
+    return p
+}
+
+function getNav(){
+    return http('http://***.**.**.***:**/api/menu/info','post')
+}
+function getList(pageNum,statues,nickname,mobile){
+    return http(`http://***.**.**.***:**/api/user?page=${pageNum}&limit=10&status=${statues}&nickname=${nickname}&mobile=${mobile}&`,'get')
+}
+
+```
+
+###### 调用
+
+```
+            async function List(n, status, nickname, mobel) {
+                var list = await getList(n, status, nickname, mobel)
+                //这个将 异步的接口封装，同步化
+                console.log(list);//这里以同步的方式  获取异步结果
+            }
+```
+
 </body>
 </html>
